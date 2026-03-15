@@ -1,192 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week Book App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-yellow: #FFF9E5;
-            --accent-brown: #4A3728;
-            --card-white: #FFFFFF;
-            --text-main: #4A3728;
-            --btn-orange: #F3A953;
-            --soft-red: #FFB5B5;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Week Book</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:#c8bfb0;font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F0F0F0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: var(--text-main);
-        }
+.phone{width:390px;height:844px;border-radius:50px;border:3px solid #111;position:relative;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.2);}
+.phone::before{content:'';position:absolute;left:-5px;top:150px;width:4px;height:46px;background:#222;border-radius:2px 0 0 2px;z-index:999;}
+.phone::after{content:'';position:absolute;right:-5px;top:185px;width:4px;height:66px;background:#222;border-radius:0 2px 2px 0;z-index:999;}
+.island{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#111;border-radius:20px;z-index:100;}
+.statusbar{position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 8px;z-index:90;pointer-events:none;}
+.st{font-size:14px;font-weight:600;}
+.si{font-size:11px;display:flex;gap:4px;}
 
-        /* Mobile Container */
-        .phone-container {
-            width: 375px;
-            height: 667px;
-            background-color: var(--bg-yellow);
-            border: 8px solid #333;
-            border-radius: 40px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
+.screen{display:none;position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+.screen::-webkit-scrollbar{display:none;}
+.screen.active{display:block;}
 
-        .screen {
-            display: none;
-            flex-direction: column;
-            padding: 40px 25px;
-            height: 100%;
-        }
+.nav{position:absolute;bottom:0;left:0;right:0;height:82px;display:flex;align-items:center;justify-content:space-around;padding:0 10px 22px;border-top:1px solid rgba(0,0,0,.08);backdrop-filter:blur(20px);z-index:80;}
+.nt{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:6px 16px;border-radius:16px;transition:all .2s;}
+.nt.on{background:rgba(217,119,6,.14);}
+.ni{font-size:22px;}
+.nl{font-size:10px;font-weight:500;}
+.hbar{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:5px;opacity:.2;z-index:81;}
 
-        .screen.active { display: flex; }
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
+@keyframes wobble{0%,100%{transform:rotate(-5deg);}25%{transform:rotate(6deg) scale(1.07);}75%{transform:rotate(4deg) scale(1.05);}}
+@keyframes dance{0%,100%{transform:rotate(-10deg) scale(1);}25%{transform:rotate(12deg) scale(1.1);}75%{transform:rotate(8deg) scale(1.08);}}
+@keyframes pop{0%{transform:scale(0) rotate(-15deg);}100%{transform:scale(1);}}
+@keyframes cf{0%{transform:translateY(-10px) rotate(0);opacity:1;}100%{transform:translateY(860px) rotate(720deg);opacity:0;}}
+@keyframes slideUp{0%{transform:translateY(30px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
 
-        /* Typography */
-        h1 { font-family: 'Caveat', cursive; font-size: 3rem; margin-bottom: 10px; }
-        .tagline { font-style: italic; font-size: 0.9rem; margin-bottom: 40px; opacity: 0.8; }
+/* ===== SPLASH ===== */
+#splash{background:linear-gradient(160deg,#fffbf0,#fef3c7,#fde68a);}
+.sp-wrap{min-height:844px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:80px 40px 60px;position:relative;}
+.sp-emoji{font-size:80px;animation:float 3s ease-in-out infinite;display:inline-block;}
+.sp-title{font-family:'Caveat',cursive;font-size:46px;color:#3d2b1f;font-weight:700;}
+.sp-tag{font-size:14px;color:#7c4a1a;text-align:center;line-height:1.8;font-style:italic;}
+.btn-dark{background:#3d2b1f;color:#fef3c7;border:none;border-radius:30px;padding:16px 52px;font-size:17px;font-family:'DM Sans';font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(61,43,31,.3);transition:transform .15s;}
+.btn-dark:active{transform:scale(.96);}
+.sp-sub{font-size:12.5px;color:#a07850;}
+.sp-sub span{color:#d97706;text-decoration:underline;cursor:pointer;}
+.nb-lines{position:absolute;bottom:50px;left:0;right:0;}
+.nbl{height:1px;background:rgba(61,43,31,.06);margin-bottom:12px;}
 
-        /* Buttons */
-        .btn-main {
-            background-color: var(--accent-brown);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: auto;
-        }
+/* ===== LOGIN ===== */
+#login{background:linear-gradient(160deg,#fffbf0,#fef3c7);}
+.lg-wrap{min-height:844px;display:flex;flex-direction:column;align-items:center;gap:13px;padding:100px 30px 50px;}
+.lg-icon{font-size:54px;margin-bottom:2px;}
+.lg-title{font-family:'Caveat',cursive;font-size:34px;color:#3d2b1f;font-weight:700;}
+.fg{width:100%;}
+.fl{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:#a07850;padding-left:14px;margin-bottom:4px;}
+.fi{width:100%;background:rgba(255,255,255,.65);border:1.5px solid rgba(217,119,6,.28);border-radius:26px;padding:13px 18px;font-size:15px;color:#3d2b1f;font-family:'DM Sans';outline:none;transition:border-color .2s,background .2s;}
+.fi:focus{border-color:#d97706;background:rgba(255,255,255,.88);}
+.or-row{display:flex;align-items:center;gap:10px;width:100%;}
+.or-row hr{flex:1;border:none;border-top:1px solid rgba(217,119,6,.2);}
+.or-row span{font-size:12px;color:#a07850;}
+.soc-row{display:flex;gap:10px;width:100%;}
+.btn-soc{flex:1;background:rgba(255,255,255,.6);border:1.5px solid rgba(217,119,6,.25);border-radius:26px;padding:12px;font-size:14px;cursor:pointer;transition:background .15s;}
+.btn-soc:active{background:rgba(255,255,255,.9);}
+.btn-amber{width:100%;background:linear-gradient(135deg,#d97706,#92400e);color:#fff;border:none;border-radius:26px;padding:15px;font-size:16px;font-family:'DM Sans';font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(180,83,9,.3);transition:transform .15s;}
+.btn-amber:active{transform:scale(.97);}
 
-        /* Home Screen Elements */
-        .dashboard-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+/* ===== HOME ===== */
+#home{background:linear-gradient(160deg,#fffbf0,#fef3c7);}
+.hm-wrap{padding:62px 20px 0;}
+.hm-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;padding:0 4px;}
+.hm-greet{font-family:'Caveat',cursive;font-size:34px;color:#3d2b1f;font-weight:700;}
+.hm-date{font-size:12px;color:#a07850;margin-top:2px;}
+.chip{background:rgba(61,43,31,.1);border-radius:14px;padding:5px 12px;font-size:12px;color:#3d2b1f;font-weight:500;}
+.qcard{background:rgba(255,255,255,.48);border-left:3px solid #d97706;border-radius:0 12px 12px 0;padding:11px 14px;margin-bottom:14px;}
+.qt{font-family:'Caveat',cursive;font-size:15.5px;color:#3d2b1f;line-height:1.5;}
+.qa{font-size:11px;color:#a07850;margin-top:3px;}
+.donut-row{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
+.dwrap{position:relative;width:88px;height:88px;flex-shrink:0;}
+.dwrap svg{transform:rotate(-90deg);}
+.dcnt{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.dcn{font-family:'Caveat',cursive;font-size:26px;color:#3d2b1f;font-weight:700;line-height:1;}
+.dcs{font-size:11px;color:#a07850;}
+.leg{display:flex;flex-direction:column;gap:7px;flex:1;}
+.li{display:flex;align-items:center;gap:7px;font-size:13px;color:#3d2b1f;}
+.ld{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.sec-lbl{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:#a07850;margin-bottom:8px;}
+.pbw{margin-bottom:10px;}
+.pbt{display:flex;justify-content:space-between;font-size:13px;color:#3d2b1f;margin-bottom:4px;}
+.pbtr{height:8px;background:rgba(61,43,31,.1);border-radius:8px;overflow:hidden;}
+.pbf{height:100%;border-radius:8px;transition:width .6s ease;}
+.summary-btn{width:100%;background:rgba(255,255,255,.55);border:1.5px solid rgba(217,119,6,.25);border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:4px;transition:background .15s;}
+.summary-btn:active{background:rgba(255,255,255,.8);}
+.sb-icon{font-size:20px;}
+.sb-text{font-size:13px;color:#3d2b1f;font-weight:500;}
+.sb-sub{font-size:11px;color:#a07850;}
 
-        .chart-placeholder {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 10px solid var(--btn-orange);
-            margin: 10px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
+/* ===== TASKS ===== */
+.tasks-wrap{padding:62px 20px 0;}
+.tasks-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;padding:0 4px;}
+.tasks-ttl{font-family:'Caveat',cursive;font-size:32px;font-weight:700;}
+.tasks-sub{font-size:12px;margin-top:2px;}
+.badge{border-radius:14px;padding:5px 12px;font-size:12px;font-weight:600;color:#fff;}
+.sec-title{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;margin:10px 4px 6px;font-weight:500;}
+.tcard{border-radius:16px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border:1.5px solid;margin-bottom:8px;cursor:pointer;transition:transform .12s,box-shadow .12s;}
+.tcard:active{transform:translateX(4px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.tn{font-family:'Caveat',cursive;font-size:17px;font-weight:600;}
+.td{font-size:12px;margin-top:2px;}
+.urgdot{width:12px;height:12px;border-radius:50%;flex-shrink:0;transition:transform .3s;}
+.add-row{display:flex;align-items:center;gap:12px;margin:6px 4px 0;cursor:pointer;padding:6px 2px;border-radius:12px;transition:background .15s;}
+.add-row:active{background:rgba(0,0,0,.04);}
+.add-circle{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0;}
+.add-lbl{font-size:13px;font-style:italic;}
+.mot-card{border-radius:0 14px 14px 0;padding:11px 14px;margin-bottom:10px;border-left:3px solid;}
+.mot-txt{font-family:'Caveat',cursive;font-size:15px;line-height:1.5;}
 
-        /* Task List */
-        .task-item {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 5px solid var(--btn-orange);
-        }
+/* ===== TASK DONE ===== */
+#taskdone{background:linear-gradient(160deg,#f0fdf4,#bbf7d0);}
+.cflay{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5;}
+.cfp{position:absolute;border-radius:2px;animation:cf linear infinite;}
+.done-wrap{padding:62px 20px 0;position:relative;z-index:10;}
+.done-card{background:rgba(255,255,255,.88);border-radius:24px;padding:28px 24px;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.08);margin:12px 0 14px;animation:slideUp .4s ease both;}
+.done-check{font-size:52px;margin-bottom:10px;animation:dance .7s ease-in-out infinite;}
+.done-ttl{font-family:'Caveat',cursive;font-size:28px;color:#14532d;font-weight:700;}
+.done-time{font-size:12px;color:#15803d;margin:4px 0 10px;}
+.done-rem{background:#f0fdf4;border-radius:10px;padding:10px;font-size:13px;color:#15803d;margin-bottom:14px;}
+.btn-green{background:linear-gradient(135deg,#16a34a,#14532d);color:#fff;border:none;border-radius:26px;padding:13px 36px;font-size:16px;font-family:'DM Sans';font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(22,163,74,.3);}
+.done-still{padding:0 4px;}
+.done-still-lbl{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:#15803d;margin-bottom:7px;}
 
-        .task-meta { font-size: 0.7rem; color: #888; margin-top: 5px; }
+/* ===== ADD TASK ===== */
+#addtask{background:linear-gradient(160deg,#fffbf0,#fef3c7);}
+.at-wrap{padding:62px 28px 0;}
+.at-title{font-family:'Caveat',cursive;font-size:32px;color:#3d2b1f;font-weight:700;margin-bottom:18px;}
+.at-back{font-size:14px;color:#a07850;cursor:pointer;margin-bottom:4px;display:inline-flex;align-items:center;gap:4px;}
+.pri-row{display:flex;gap:8px;margin-top:4px;}
+.pri{flex:1;border-radius:18px;padding:9px 4px;font-size:13px;font-family:'DM Sans';cursor:pointer;text-align:center;border:1.5px solid rgba(217,119,6,.28);background:rgba(255,255,255,.55);color:#a07850;transition:all .15s;}
+.pri.sel-h{background:#fee2e2;border-color:#ef4444;color:#b91c1c;font-weight:600;}
+.pri.sel-m{background:#fff7ed;border-color:#f97316;color:#c2410c;font-weight:600;}
+.pri.sel-l{background:#fefce8;border-color:#fbbf24;color:#92400e;font-weight:600;}
+.rc-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
+.rc{border-radius:18px;padding:8px 14px;font-size:12px;border:1.5px solid rgba(217,119,6,.28);background:rgba(255,255,255,.55);color:#a07850;cursor:pointer;transition:all .15s;}
+.rc.sel{background:#fef3c7;border-color:#d97706;color:#3d2b1f;font-weight:600;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fi-at{width:100%;background:rgba(255,255,255,.65);border:1.5px solid rgba(217,119,6,.28);border-radius:18px;padding:11px 16px;font-size:14px;color:#3d2b1f;font-family:'DM Sans';outline:none;transition:border-color .2s;}
+.fi-at:focus{border-color:#d97706;background:rgba(255,255,255,.88);}
+.at-lbl{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:#a07850;margin-bottom:5px;}
 
-        /* Navigation Bar */
-        .nav-bar {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 60px;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid #eee;
-        }
-
-        .nav-item { font-size: 0.7rem; cursor: pointer; text-align: center; color: #999; }
-        .nav-item.active { color: var(--accent-brown); font-weight: bold; }
-    </style>
+/* ===== DESIGN ===== */
+#design{background:linear-gradient(160deg,#fdf4ff,#e9d5ff);}
+.dg-wrap{padding:62px 20px 0;}
+.dg-title{font-family:'Caveat',cursive;font-size:32px;color:#3b0764;font-weight:700;margin-bottom:2px;}
+.dg-sub{font-size:13px;color:#7e22ce;margin-bottom:14px;}
+.dg-card{background:rgba(255,255,255,.5);border-radius:18px;padding:14px 16px;margin-bottom:12px;}
+.dg-lbl{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:#7e22ce;margin-bottom:10px;font-weight:500;}
+.cdots{display:flex;gap:8px;margin-bottom:10px;}
+.cdot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:transform .15s;}
+.cdot:active{transform:scale(1.2);}
+.cdot.sel{border-color:#3b0764;box-shadow:0 0 0 2px #fff,0 0 0 4px #7c3aed;}
+.prev-box{border-radius:12px;padding:12px 14px;}
+.prev-week{font-family:'Caveat',cursive;font-size:20px;color:#3d2b1f;font-weight:700;}
+.prev-date{font-size:12px;color:#a07850;margin-top:1px;}
+.st-row{display:flex;gap:8px;}
+.st-opt{flex:1;border-radius:12px;padding:12px;text-align:center;cursor:pointer;border:1.5px solid rgba(124,58,237,.3);transition:all .15s;}
+.st-opt.sel{background:rgba(255,255,255,.9);border-color:#7c3aed;}
+.st-opt-t{font-size:14px;color:#3b0764;}
+.st-opt-s{font-size:10px;color:#7e22ce;margin-top:2px;}
+.qt-row{display:flex;gap:7px;}
+.qt-opt{flex:1;border-radius:12px;padding:9px 4px;text-align:center;font-size:12px;color:#3b0764;border:1.5px solid rgba(124,58,237,.3);cursor:pointer;transition:all .15s;}
+.qt-opt.sel{background:rgba(255,255,255,.85);border-color:#7c3aed;font-weight:600;}
+.saved-toast{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:#3b0764;color:#fff;border-radius:20px;padding:8px 20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:200;}
+.saved-toast.show{opacity:1;}
+</style>
 </head>
 <body>
+<div class="phone">
+  <div class="island"></div>
 
-<div class="phone-container">
-    
-    <div id="landing" class="screen active">
-        <div style="text-align: center; margin-top: 80px;">
-            <div style="font-size: 40px; margin-bottom: 20px;">📓</div>
-            <h1>Week Book</h1>
-            <p class="tagline">"A journal that moves with your deadlines"</p>
-        </div>
-        <button class="btn-main" onclick="showScreen('home')">Get started</button>
-        <p style="text-align: center; font-size: 0.7rem; margin-top: 15px;">
-            Already have an account? <span style="text-decoration: underline; color: var(--btn-orange);">Log in</span>
-        </p>
+  <!-- SPLASH -->
+  <div class="screen active" id="splash">
+    <div class="statusbar" style="color:#3d2b1f;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="sp-wrap">
+      <div class="nb-lines"><div class="nbl"></div><div class="nbl"></div><div class="nbl"></div></div>
+      <div class="sp-emoji">📓</div>
+      <div class="sp-title">Week Book</div>
+      <div class="sp-tag">"A journal that moves<br>with your deadlines"</div>
+      <button class="btn-dark" onclick="go('login')">Get started</button>
+      <div class="sp-sub">Already have an account? <span onclick="go('login')">Log in</span></div>
     </div>
+  </div>
 
-    <div id="home" class="screen">
-        <h3>Hi Alex 👋</h3>
-        <p style="font-size: 0.8rem; margin-bottom: 20px;">Wed, Mar 4 - Week 9</p>
-        
-        <div class="dashboard-card">
-            <p style="font-size: 0.7rem; font-style: italic;">"You have 3 assignments due this week. Start with the hardest one first."</p>
-            <div class="chart-placeholder">4/10</div>
-        </div>
-
-        <h4>THIS WEEK</h4>
-        <div class="task-item">Essay Draft <div class="task-meta">Due in 2 days</div></div>
-        <div class="task-item">Reading #3 <div class="task-meta">Due in 4 days</div></div>
-
-        <div class="nav-bar">
-            <div class="nav-item active">Home</div>
-            <div class="nav-item" onclick="showScreen('tasks')">Tasks</div>
-            <div class="nav-item">Design</div>
-        </div>
+  <!-- LOGIN -->
+  <div class="screen" id="login">
+    <div class="statusbar" style="color:#3d2b1f;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="lg-wrap">
+      <div class="lg-icon">📅</div>
+      <div class="lg-title">Welcome back</div>
+      <div class="fg"><div class="fl">Email</div><input class="fi" type="email" value="alex@uw.edu"></div>
+      <div class="fg"><div class="fl">Password</div><input class="fi" type="password" value="password123"></div>
+      <div class="fg"><div class="fl">School</div><input class="fi" type="text" value="University of Washington"></div>
+      <div class="or-row"><hr><span>or</span><hr></div>
+      <div class="soc-row"><button class="btn-soc">🔵 Google</button><button class="btn-soc">🍎 Apple</button></div>
+      <button class="btn-amber" onclick="go('home')">→ Open my book</button>
     </div>
+  </div>
 
-    <div id="tasks" class="screen">
-        <h3>My tasks</h3>
-        <p style="font-size: 0.8rem; margin-bottom: 20px; color: #d9534f;">3 due in this week</p>
-        
-        <p style="font-weight: bold; font-size: 0.8rem; margin-bottom: 10px;">TODAY</p>
-        <div class="task-item" style="border-color: #ffb5b5;">
-            Reading #3
-            <div class="task-meta">Due in 3 hours - INFO 200</div>
+  <!-- HOME -->
+  <div class="screen" id="home">
+    <div class="statusbar" style="color:#3d2b1f;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="hm-wrap" style="padding-bottom:90px;">
+      <div class="hm-top">
+        <div><div class="hm-greet">Hi Alex 👋</div><div class="hm-date">Wed, Mar 4 · Week 9</div></div>
+        <div class="chip">4 / 10 done</div>
+      </div>
+      <div class="qcard"><div class="qt">"You have 3 assignments due this week. Start with the hardest one first 💪"</div><div class="qa">✏️ Today's note</div></div>
+      <div class="donut-row">
+        <div class="dwrap">
+          <svg width="88" height="88" viewBox="0 0 88 88">
+            <circle cx="44" cy="44" r="34" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+            <circle cx="44" cy="44" r="34" fill="none" stroke="#22c55e" stroke-width="12" stroke-dasharray="54 160" stroke-linecap="round"/>
+            <circle cx="44" cy="44" r="34" fill="none" stroke="#f59e0b" stroke-width="12" stroke-dasharray="40 174" stroke-dashoffset="-54" stroke-linecap="round"/>
+            <circle cx="44" cy="44" r="34" fill="none" stroke="#ef4444" stroke-width="12" stroke-dasharray="40 174" stroke-dashoffset="-94" stroke-linecap="round"/>
+          </svg>
+          <div class="dcnt"><div class="dcn">4</div><div class="dcs">/10</div></div>
         </div>
-
-        <p style="font-weight: bold; font-size: 0.8rem; margin-top: 15px; margin-bottom: 10px;">UPCOMING</p>
-        <div class="task-item" style="border-color: #eee;">
-            Quiz 1
-            <div class="task-meta">Due in 10 days - MATH 126</div>
+        <div class="leg">
+          <div class="li"><div class="ld" style="background:#22c55e"></div>Done (4)</div>
+          <div class="li"><div class="ld" style="background:#f59e0b"></div>Ongoing (3)</div>
+          <div class="li"><div class="ld" style="background:#ef4444"></div>Left (3)</div>
         </div>
-
-        <button style="background: none; border: 1px dashed #aaa; padding: 10px; border-radius: 10px; margin-top: 10px;">+ Add a task...</button>
-
-        <div class="nav-bar">
-            <div class="nav-item" onclick="showScreen('home')">Home</div>
-            <div class="nav-item active">Tasks</div>
-            <div class="nav-item">Design</div>
-        </div>
+      </div>
+      <div class="sec-lbl">This Week</div>
+      <div class="pbw"><div class="pbt"><span>Essay Draft</span><span style="color:#22c55e">80%</span></div><div class="pbtr"><div class="pbf" style="width:80%;background:linear-gradient(90deg,#22c55e,#4ade80)"></div></div></div>
+      <div class="pbw"><div class="pbt"><span>Reading #3</span><span style="color:#f59e0b">50%</span></div><div class="pbtr"><div class="pbf" style="width:50%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div></div>
+      <div class="pbw"><div class="pbt"><span>Quiz 1</span><span style="color:#ef4444">20%</span></div><div class="pbtr"><div class="pbf" style="width:20%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div></div>
+      <div class="summary-btn" onclick="go('tasks7')">
+        <div class="sb-icon">📋</div>
+        <div><div class="sb-text">View all tasks →</div><div class="sb-sub">3 due this week</div></div>
+      </div>
     </div>
+    <div class="nav" style="background:rgba(255,251,240,.95);color:#3d2b1f;">
+      <div class="nt on" onclick="go('home')"><span class="ni">🏠</span><span class="nl" style="color:#d97706">Home</span></div>
+      <div class="nt" onclick="go('tasks7')"><span class="ni">✅</span><span class="nl" style="color:#a07850">Tasks</span></div>
+      <div class="nt" onclick="go('design')"><span class="ni">🎨</span><span class="nl" style="color:#a07850">Design</span></div>
+    </div>
+    <div class="hbar" style="background:#3d2b1f"></div>
+  </div>
+
+  <!-- TASKS 7 DAYS -->
+  <div class="screen" id="tasks7">
+    <div class="statusbar" style="color:#3d2b1f;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="tasks-wrap" style="padding-bottom:90px;background:linear-gradient(160deg,#fffbf0,#fef3c7);min-height:844px;">
+      <div class="tasks-top">
+        <div><div class="tasks-ttl" style="color:#3d2b1f">My Tasks</div><div class="tasks-sub" style="color:#a07850">3 due this week</div></div>
+        <div class="badge" style="background:#5c3a1e">😌 Relaxed</div>
+      </div>
+      <div class="sec-title" style="color:#a07850">Today</div>
+      <div class="tcard" style="background:rgba(255,255,255,.65);border-color:#fbbf24;" onclick="go('tasks3')">
+        <div><div class="tn" style="color:#3d2b1f">Reading #3</div><div class="td" style="color:#a07850">📅 Due in 3 days · INFO 200</div></div>
+        <div class="urgdot" style="background:#fbbf24"></div>
+      </div>
+      <div class="tcard" style="background:rgba(255,255,255,.65);border-color:#fbbf24;" onclick="go('tasks3')">
+        <div><div class="tn" style="color:#3d2b1f">Discussion Board</div><div class="td" style="color:#a07850">📅 Due in 7 days · INFO 360</div></div>
+        <div class="urgdot" style="background:#fbbf24"></div>
+      </div>
+      <div class="sec-title" style="color:#a07850">Upcoming</div>
+      <div class="tcard" style="background:rgba(255,255,255,.45);border-color:rgba(61,43,31,.12);" onclick="go('tasks3')">
+        <div><div class="tn" style="color:#3d2b1f;opacity:.7">Quiz 1</div><div class="td" style="color:#a07850">📅 Due in 10 days · MATH 126</div></div>
+        <div class="urgdot" style="background:#d1d5db"></div>
+      </div>
+      <div class="add-row" onclick="go('addtask')">
+        <div class="add-circle" style="background:#5c3a1e">+</div>
+        <div class="add-lbl" style="color:#a07850">Add a task…</div>
+      </div>
+    </div>
+    <div class="nav" style="background:rgba(255,251,240,.95);color:#3d2b1f;">
+      <div class="nt" onclick="go('home')"><span class="ni">🏠</span><span class="nl" style="color:#a07850">Home</span></div>
+      <div class="nt on" onclick="go('tasks7')"><span class="ni">✅</span><span class="nl" style="color:#d97706">Tasks</span></div>
+      <div class="nt" onclick="go('design')"><span class="ni">🎨</span><span class="nl" style="color:#a07850">Design</span></div>
+    </div>
+    <div class="hbar" style="background:#3d2b1f"></div>
+  </div>
+
+  <!-- TASKS 3 DAYS -->
+  <div class="screen" id="tasks3">
+    <div class="statusbar" style="color:#9a3412;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="tasks-wrap" style="padding-bottom:90px;background:linear-gradient(160deg,#fff7ed,#fed7aa);min-height:844px;">
+      <div class="tasks-top">
+        <div><div class="tasks-ttl" style="color:#7c2d12">My Tasks</div><div class="tasks-sub" style="color:#9a3412">Deadline getting close</div></div>
+        <div class="badge" style="background:#ea580c">☕ 3 days!</div>
+      </div>
+      <div class="sec-title" style="color:#9a3412">Urgent</div>
+      <div class="tcard" style="background:rgba(254,215,170,.7);border-color:#ef4444;" onclick="go('tasks0')">
+        <div><div class="tn" style="color:#7c2d12">Reading #3</div><div class="td" style="color:#9a3412">⚡ Due in 2 days · INFO 200</div></div>
+        <div class="urgdot" style="background:#ef4444"></div>
+      </div>
+      <div class="tcard" style="background:rgba(255,237,213,.8);border-color:#f97316;" onclick="go('tasks0')">
+        <div><div class="tn" style="color:#7c2d12">Discussion Board</div><div class="td" style="color:#9a3412">📅 Due in 3 days · INFO 360</div></div>
+        <div class="urgdot" style="background:#f97316"></div>
+      </div>
+      <div class="sec-title" style="color:#9a3412">This Week</div>
+      <div class="tcard" style="background:rgba(255,247,237,.8);border-color:#fbbf24;" onclick="go('tasks0')">
+        <div><div class="tn" style="color:#7c2d12">Quiz 1</div><div class="td" style="color:#a07850">📅 Due in 7 days · MATH 126</div></div>
+        <div class="urgdot" style="background:#fbbf24"></div>
+      </div>
+      <div class="add-row" onclick="go('addtask')">
+        <div class="add-circle" style="background:#ea580c">+</div>
+        <div class="add-lbl" style="color:#9a3412">Add a task…</div>
+      </div>
+    </div>
+    <div class="nav" style="background:rgba(255,247,237,.95);">
+      <div class="nt" onclick="go('home')"><span class="ni">🏠</span><span class="nl" style="color:#a07850">Home</span></div>
+      <div class="nt on" onclick="go('tasks3')"><span class="ni">✅</span><span class="nl" style="color:#ea580c">Tasks</span></div>
+      <div class="nt" onclick="go('design')"><span class="ni">🎨</span><span class="nl" style="color:#a07850">Design</span></div>
+    </div>
+    <div class="hbar" style="background:#7c2d12"></div>
+  </div>
+
+  <!-- TASKS 0 DAY -->
+  <div class="screen" id="tasks0">
+    <div class="statusbar" style="color:#9f1239;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="tasks-wrap" style="padding-bottom:90px;background:linear-gradient(160deg,#fff1f2,#fecdd3);min-height:844px;">
+      <div class="tasks-top">
+        <div><div class="tasks-ttl" style="color:#7f1d1d;font-weight:700">My Tasks</div><div class="tasks-sub" style="color:#9f1239;font-weight:600">Due today — focus now</div></div>
+        <div class="badge" style="background:#b91c1c">🚨 Today</div>
+      </div>
+      <div class="mot-card" style="background:rgba(255,255,255,.5);border-color:#dc2626;margin-bottom:12px;">
+        <div class="mot-txt" style="color:#7f1d1d">"You've done hard things before. You've got this!"</div>
+      </div>
+      <div class="sec-title" style="color:#9f1239">Due Today</div>
+      <div class="tcard" style="background:rgba(254,202,202,.8);border-color:#dc2626;border-width:2px;" onclick="go('taskdone')">
+        <div><div class="tn" style="color:#7f1d1d;font-weight:700">Reading #3</div><div class="td" style="color:#991b1b;font-weight:600">🚨 Due in 4 hours · INFO 200</div></div>
+        <div class="urgdot" style="background:#dc2626;animation:pulse 1.2s ease-in-out infinite"></div>
+      </div>
+      <div class="tcard" style="background:rgba(254,226,226,.8);border-color:#ef4444;border-width:2px;" onclick="go('taskdone')">
+        <div><div class="tn" style="color:#7f1d1d;font-weight:700">Discussion Board</div><div class="td" style="color:#991b1b;font-weight:600">🔴 Due at midnight · INFO 360</div></div>
+        <div class="urgdot" style="background:#ef4444;animation:pulse 1.2s ease-in-out infinite .3s"></div>
+      </div>
+      <div class="sec-title" style="color:#9f1239">Later This Week</div>
+      <div class="tcard" style="background:rgba(255,241,242,.7);border-color:rgba(239,68,68,.3);" onclick="go('taskdone')">
+        <div><div class="tn" style="color:#7f1d1d">Quiz 1</div><div class="td" style="color:#b91c1c">📅 Due in 3 days</div></div>
+        <div class="urgdot" style="background:#fca5a5"></div>
+      </div>
+      <div class="add-row" onclick="go('addtask')">
+        <div class="add-circle" style="background:#dc2626">+</div>
+        <div class="add-lbl" style="color:#9f1239">Add a task…</div>
+      </div>
+    </div>
+    <div class="nav" style="background:rgba(255,241,242,.95);">
+      <div class="nt" onclick="go('home')"><span class="ni">🏠</span><span class="nl" style="color:#a07850">Home</span></div>
+      <div class="nt on"><span class="ni">✅</span><span class="nl" style="color:#dc2626">Tasks</span></div>
+      <div class="nt" onclick="go('design')"><span class="ni">🎨</span><span class="nl" style="color:#a07850">Design</span></div>
+    </div>
+    <div class="hbar" style="background:#7f1d1d"></div>
+  </div>
+
+  <!-- TASK DONE -->
+  <div class="screen" id="taskdone">
+    <div class="statusbar" style="color:#14532d;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="cflay" id="cflay"></div>
+    <div class="done-wrap" style="padding-bottom:90px;">
+      <div class="done-card">
+        <div class="done-check">🥳</div>
+        <div class="done-ttl">Reading #3 — Done!</div>
+        <div class="done-time">Completed Mar 4 at 3:42pm · You finished early! 🎉</div>
+        <div class="done-rem">2 tasks remaining today</div>
+        <button class="btn-green" onclick="go('tasks7')">Keep going →</button>
+      </div>
+      <div class="done-still">
+        <div class="done-still-lbl">Still to do</div>
+        <div class="tcard" style="background:rgba(255,255,255,.65);border-color:#fbbf24;">
+          <div><div class="tn" style="color:#14532d">Discussion Board</div><div class="td" style="color:#15803d">📅 Due tonight</div></div>
+          <div class="urgdot" style="background:#fbbf24"></div>
+        </div>
+        <div style="margin:8px 0 4px;background:rgba(255,255,255,.5);border-radius:12px;padding:10px 12px;font-size:12px;color:#15803d;">💡 Remember to rest your eyes and don't overwork yourself.</div>
+      </div>
+    </div>
+    <div class="nav" style="background:rgba(240,253,244,.95);">
+      <div class="nt" onclick="go('home')"><span class="ni">🏠</span><span class="nl" style="color:#a07850">Home</span></div>
+      <div class="nt on"><span class="ni">✅</span><span class="nl" style="color:#16a34a">Tasks</span></div>
+      <div class="nt" onclick="go('design')"><span class="ni">🎨</span><span class="nl" style="color:#a07850">Design</span></div>
+    </div>
+    <div class="hbar" style="background:#14532d"></div>
+  </div>
+
+  <!-- ADD TASK -->
+  <div class="screen" id="addtask">
+    <div class="statusbar" style="color:#3d2b1f;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="at-wrap" style="padding-bottom:90px;background:linear-gradient(160deg,#fffbf0,#fef3c7);min-height:844px;">
+      <div class="at-back" onclick="go('tasks7')">← Back</div>
+      <div class="at-title">Add a Task</div>
+      <div class="fg" style="margin-bottom:12px;"><div class="at-lbl">Task Name</div><input class="fi-at" type="text" placeholder="e.g. Essay Draft"></div>
+      <div class="two-col" style="margin-bottom:12px;">
+        <div class="fg"><div class="at-lbl">Due Date</div><input class="fi-at" type="text" placeholder="Mar 7, 2026"></div>
+        <div class="fg"><div class="at-lbl">Class</div><input class="fi-at" type="text" placeholder="INFO 360"></div>
+      </div>
+      <div class="fg" style="margin-bottom:12px;">
+        <div class="at-lbl">Priority</div>
+        <div class="pri-row">
+          <div class="pri sel-h" onclick="setPri(this,'h')">High</div>
+          <div class="pri" onclick="setPri(this,'m')">Medium</div>
+          <div class="pri" onclick="setPri(this,'l')">Low</div>
+        </div>
+      </div>
+      <div class="fg" style="margin-bottom:12px;"><div class="at-lbl">Notes (optional)</div><input class="fi-at" type="text" placeholder="Chapter 4–6, focus on..."></div>
+      <div class="fg" style="margin-bottom:20px;">
+        <div class="at-lbl">Remind Me</div>
+        <div class="rc-row">
+          <div class="rc" onclick="toggleRc(this)">1 day before</div>
+          <div class="rc sel" onclick="toggleRc(this)">3 days before</div>
+          <div class="rc" onclick="toggleRc(this)">1 week before</div>
+        </div>
+      </div>
+      <button class="btn-amber" onclick="go('tasks7')">Save task</button>
+    </div>
+    <div class="nav" style="background:rgba(255,251,240,.95);">
+      <div class="nt" onclick="go('home')"><span class="ni">🏠</span><span class="nl" style="color:#a07850">Home</span></div>
+      <div class="nt on"><span class="ni">✅</span><span class="nl" style="color:#d97706">Tasks</span></div>
+      <div class="nt" onclick="go('design')"><span class="ni">🎨</span><span class="nl" style="color:#a07850">Design</span></div>
+    </div>
+    <div class="hbar" style="background:#3d2b1f"></div>
+  </div>
+
+  <!-- DESIGN -->
+  <div class="screen" id="design">
+    <div class="statusbar" style="color:#3b0764;"><span class="st">9:41</span><span class="si">📶 🔋</span></div>
+    <div class="saved-toast" id="toast">✅ Saved!</div>
+    <div class="dg-wrap" style="padding-bottom:90px;">
+      <div class="dg-title">Design 🎨</div>
+      <div class="dg-sub">Make it yours</div>
+      <div class="dg-card">
+        <div class="dg-lbl">Journal Cover Theme</div>
+        <div class="cdots">
+          <div class="cdot sel" style="background:#fde68a" onclick="setColor(this,'#fde68a')"></div>
+          <div class="cdot" style="background:#fed7aa" onclick="setColor(this,'#fed7aa')"></div>
+          <div class="cdot" style="background:#fecdd3" onclick="setColor(this,'#fecdd3')"></div>
+          <div class="cdot" style="background:#bbf7d0" onclick="setColor(this,'#bbf7d0')"></div>
+          <div class="cdot" style="background:#bae6fd" onclick="setColor(this,'#bae6fd')"></div>
+          <div class="cdot" style="background:#e9d5ff" onclick="setColor(this,'#e9d5ff')"></div>
+        </div>
+        <div class="prev-box" id="prevBox" style="background:#fde68a">
+          <div class="prev-week">WEEK 9</div>
+          <div class="prev-date">Mar 2 – Mar 8, 2026</div>
+        </div>
+      </div>
+      <div class="dg-card">
+        <div class="dg-lbl">Journal Style</div>
+        <div class="st-row">
+          <div class="st-opt sel" onclick="setStyle(this)"><div class="st-opt-t" style="font-family:'Caveat',cursive">Handwritten</div><div class="st-opt-s">Current</div></div>
+          <div class="st-opt" onclick="setStyle(this)"><div class="st-opt-t">Clean Sans</div><div class="st-opt-s">Switch</div></div>
+        </div>
+      </div>
+      <div class="dg-card">
+        <div class="dg-lbl">Daily Quote Style</div>
+        <div class="qt-row">
+          <div class="qt-opt sel" onclick="setQuote(this)">Motivational</div>
+          <div class="qt-opt" onclick="setQuote(this)">Calm</div>
+          <div class="qt-opt" onclick="setQuote(this)">Funny</div>
+        </div>
+        <div style="margin-top:10px;background:rgba(255,255,255,.5);border-radius:10px;padding:10px;font-family:'Caveat',cursive;font-size:14px;color:#3b0764;font-style:italic;" id="quotePreview">"Small progress is still progress. 😎"</div>
+      </div>
+    </div>
+    <div class="nav" style="background:rgba(253,244,255,.95);">
+      <div class="nt" onclick="go('home')"><span class="ni">🏠</span><span class="nl" style="color:#a07850">Home</span></div>
+      <div class="nt" onclick="go('tasks7')"><span class="ni">✅</span><span class="nl" style="color:#a07850">Tasks</span></div>
+      <div class="nt on"><span class="ni">🎨</span><span class="nl" style="color:#7c3aed">Design</span></div>
+    </div>
+    <div class="hbar" style="background:#3b0764"></div>
+  </div>
 
 </div>
 
 <script>
-    function showScreen(screenId) {
-        // Hide all screens
-        const screens = document.querySelectorAll('.screen');
-        screens.forEach(s => s.classList.remove('active'));
-        
-        // Show selected screen
-        document.getElementById(screenId).classList.add('active');
-    }
-</script>
+// Screen navigation
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const t=document.getElementById(id);
+  if(t){t.classList.add('active');t.scrollTop=0;}
+  if(id==='taskdone') makeConfetti();
+}
 
+// Confetti
+function makeConfetti(){
+  const lay=document.getElementById('cflay');
+  lay.innerHTML='';
+  const colors=['#fbbf24','#34d399','#60a5fa','#f472b6','#a78bfa','#fb923c','#f87171'];
+  for(let i=0;i<32;i++){
+    const p=document.createElement('div');
+    p.className='cfp';
+    p.style.cssText=`left:${Math.random()*100}%;background:${colors[i%colors.length]};
+      animation-duration:${Math.random()*2+2.5}s;animation-delay:${Math.random()*3}s;
+      width:${Math.random()*6+4}px;height:${Math.random()*7+6}px;
+      border-radius:${Math.random()>.5?'50%':'2px'}`;
+    lay.appendChild(p);
+  }
+}
+
+// Priority selector
+function setPri(el,type){
+  el.closest('.pri-row').querySelectorAll('.pri').forEach(p=>{
+    p.classList.remove('sel-h','sel-m','sel-l');
+  });
+  el.classList.add('sel-'+type);
+}
+
+// Remind me chips
+function toggleRc(el){el.classList.toggle('sel');}
+
+// Color picker
+function setColor(el,color){
+  document.querySelectorAll('.cdot').forEach(d=>d.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('prevBox').style.background=color;
+}
+
+// Style selector
+function setStyle(el){
+  el.closest('.st-row').querySelectorAll('.st-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  showToast();
+}
+
+// Quote selector
+const quotes={
+  'Motivational':'"Small progress is still progress. 😎"',
+  'Calm':'"Take it one step at a time. 🌿"',
+  'Funny':'"Deadlines: the original motivation. 😅"'
+};
+function setQuote(el){
+  el.closest('.qt-row').querySelectorAll('.qt-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('quotePreview').textContent=quotes[el.textContent]||'';
+  showToast();
+}
+
+// Toast
+function showToast(){
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// Pulse animation for urgent dots
+const style=document.createElement('style');
+style.textContent='@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.4);}}';
+document.head.appendChild(style);
+</script>
 </body>
 </html>
